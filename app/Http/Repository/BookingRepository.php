@@ -28,11 +28,17 @@ class BookingRepository implements IBookingRepository
             $user = new User();
             $userData = User::where('id', auth('api')->id())->first();
             $user->fill($userData->toArray());
+            $request->request->add([
+                'user_id' => auth('api')->id()
+            ]);
             if ($user->getIsBirthday()) {
                 $request->request->add([
                     'book_amount' => ($timeSlot->escapeRoom->amount - ($timeSlot->escapeRoom->amount * config("birthday_discount_rate"))
-                    ),
-                    'user_id' => auth('api')->id()
+                    )
+                ]);
+            } else{
+                $request->request->add([
+                    'book_amount' => $timeSlot->escapeRoom->amount,
                 ]);
             }
             $this->booking = Booking::create([
