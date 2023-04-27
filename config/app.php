@@ -185,4 +185,5 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'birthday_discount_rate' => env('BIRTHDAY_DISCOUNT_RATE'),
 ];
