@@ -12,3 +12,19 @@ You can visit to my web site for show another project or contant me. (https://om
 ## License
 
 The Booking api is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Requirements
+* PHP version 7+
+* Composer  
+
+
+## Installation
+
+* Download repository to your local machine
+* Go to project path with command window
+* Run "composer install" command 
+* Configure your database setting on .env file
+* Run "php artisan migrate"
+* Run "php artisan db:seed"
+* Run "php artisan serve"
+* Good job!

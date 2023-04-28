@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("time_slot_id");
             $table->foreignId("user_id");
-            $table->tinyInteger("status");
+            $table->tinyInteger("status")->default(1);
             $table->double("book_amount");
             $table->softDeletes();
             $table->timestamps();

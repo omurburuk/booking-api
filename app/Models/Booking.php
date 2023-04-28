@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Booking extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $fillable = ["time_slot_id", "user_id","status","book_amount"];
 
-	protected $table = 'escape_rooms';
+	protected $table = 'bookings';
     public function user()
 	{
 		return $this->belongsTo(User::class, 'users', 'id', 'user_id');

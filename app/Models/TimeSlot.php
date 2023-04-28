@@ -11,7 +11,7 @@ class TimeSlot extends Model
     protected $table = 'time_slots';
     public function escapeRoom()
 	{
-		return $this->belongsTo(EscapeRoom::class, 'escape_rooms', 'id', 'escape_room_id');
+		return $this->belongsTo(EscapeRoom::class, 'escape_room_id');
 	}
 
 }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Repository;
 
-use App\Http\Repository\IBaseRepository;
 use App\Http\Resources\BookingResource;
-use App\Http\Resources\PersonFieldResource;
 use App\Models\Booking;
 use App\Models\TimeSlot;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class BookingRepository implements IBookingRepository
 {
@@ -21,35 +20,33 @@ class BookingRepository implements IBookingRepository
 
     public function create($request)
     {
-        $timeSlot = TimeSlot::with('escape_rooms')->where('time_slots.id', $request->input("time_slot_id"));
-
+        $timeSlot = TimeSlot::with('escapeRoom')->where('time_slots.id', $request["time_slot_id"])
+            ->where('time_slots.is_available', 1)
+            ->first();
+        if (!$timeSlot)
+            return null;
         $room = $this->room->show($timeSlot->escape_room_id);
         if ($room->status) {
             $user = new User();
-            $userData = User::where('id', auth('api')->id())->first();
+            $userData = User::where('id', $request["user_id"])->first();
             $user->fill($userData->toArray());
-            $request->request->add([
-                'user_id' => auth('api')->id()
-            ]);
             if ($user->getIsBirthday()) {
-                $request->request->add([
-                    'book_amount' => ($timeSlot->escapeRoom->amount - ($timeSlot->escapeRoom->amount * config("birthday_discount_rate"))
-                    )
-                ]);
-            } else{
-                $request->request->add([
-                    'book_amount' => $timeSlot->escapeRoom->amount,
-                ]);
+                $request['book_amount'] =
+                    $timeSlot->escapeRoom->amount - ($timeSlot->escapeRoom->amount * config("birthday_discount_rate"));
+            } else {
+                $request['book_amount'] = $timeSlot->escapeRoom->amount;
             }
             $this->booking = Booking::create([
                 ...$request
             ]);
+            $timeSlot->is_available = false;
+            $timeSlot->save();
             return $this->booking;
         }
-        return null ;
+        return null;
     }
 
-    public function get($request, $per_page, $paginate = true)
+    public function get($request, $per_page, $paginate = false)
     {
         $bookings = Booking::query();
 
@@ -57,7 +54,7 @@ class BookingRepository implements IBookingRepository
             ? $bookings->paginate($per_page)
             : $bookings->get();
 
-        BookingResource::collection($bookings);
+        //BookingResource::collection($bookings);
 
         return $bookings;
     }
@@ -69,7 +66,7 @@ class BookingRepository implements IBookingRepository
             ->where("id", $id)
             ->first();
 
-        BookingResource::collection($booking);
+        //BookingResource::collection($booking);
 
         return $booking;
     }
@@ -78,7 +75,7 @@ class BookingRepository implements IBookingRepository
         $booking = Booking::where("id", $id)
             ->update($data);
 
-        BookingResource::collection($booking);
+        //$booking=BookingResource::collection($booking);
 
         return $booking;
     }
@@ -95,7 +92,7 @@ class BookingRepository implements IBookingRepository
             ->with("time_slots")
             ->first();
 
-        BookingResource::collection($booking->time_slots);
+        //$booking=BookingResource::collection($booking->time_slots);
 
         return $booking;
     }

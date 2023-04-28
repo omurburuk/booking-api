@@ -4,7 +4,6 @@ namespace App\Http\Repository;
 
 use App\Http\Repository\IBaseRepository;
 use App\Http\Resources\EscapeRoomResource;
-use App\Http\Resources\PersonFieldResource;
 use App\Models\EscapeRoom;
 
 class EscapeRoomRepository implements IEscapeRoomRepository
@@ -22,7 +21,7 @@ class EscapeRoomRepository implements IEscapeRoomRepository
         ]);
     }
 
-    public function get($request, $per_page, $paginate = true)
+    public function get($request, $per_page, $paginate = false)
     {
         $rooms = EscapeRoom::query();
 
@@ -30,7 +29,7 @@ class EscapeRoomRepository implements IEscapeRoomRepository
             ? $rooms->paginate($per_page)
             : $rooms->get();
 
-        EscapeRoomResource::collection($rooms);
+        //EscapeRoomResource::collection($rooms);
 
         return $rooms;
     }
@@ -41,7 +40,7 @@ class EscapeRoomRepository implements IEscapeRoomRepository
             ->where("id", $id)
             ->first();
 
-        EscapeRoomResource::collection($room);
+        //EscapeRoomResource::collection($room);
 
         return $room;
     }
@@ -50,7 +49,7 @@ class EscapeRoomRepository implements IEscapeRoomRepository
         $room = EscapeRoom::where("id", $id)
             ->update($data);
 
-        EscapeRoomResource::collection($room);
+        //EscapeRoomResource::collection($room);
 
         return $room;
     }
@@ -64,10 +63,10 @@ class EscapeRoomRepository implements IEscapeRoomRepository
     public function time_slots($id)
     {
         $room = EscapeRoom::where("id", $id)
-            ->with("time_slots")
+            ->with("timeSlots")
             ->first();
 
-        EscapeRoomResource::collection($room->time_slots);
+        //EscapeRoomResource::collection($room->time_slots);
 
         return $room;
     }

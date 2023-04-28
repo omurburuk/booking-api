@@ -15,12 +15,13 @@ class EscapeRoomController extends Controller
     {
         $this->repo = app()->make(IEscapeRoomRepository::class);
     }
-
     /**
-     * @SWG\Get(
+     * @OA\Get(
      *   path="/api/escape-rooms",
-     *   summary="Escape room list",
-     *   @SWG\Response(response=200, description="successful operation")
+     * operationId="showRoomList",
+     *  tags={"EscapeRoom"},
+     *   summary="escape room list",
+     *   @OA\Response(response=200, description="successful operation")
      * )
      *
      * Display a listing of the resource.
@@ -29,54 +30,70 @@ class EscapeRoomController extends Controller
      */
 
     public function index(Request $request)
-	{
-		$rooms = $this->repo->get($request,$request->input("page"));
-
-		return response()->json([
-			"status"	=>	"success",
-			"data"		=>	$rooms
-		]);
-	}
-
-    /**
-     * @SWG\Get(
-     *   path="/api/escape-rooms/{id}",
-     *   summary="Escape room list",
-     *   @SWG\Response(response=200, description="successful operation")
-     * )
-     *
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(EscapeRoom $escapeRoom)
     {
-        $room = $this->repo->show($escapeRoom->id,$escapeRoom);
+        $rooms = $this->repo->get($request, $request->input("page"));
 
-		return response()->json([
-			"status"	=>	"success",
-			"data"		=>	$room
-		]);
+        return response()->json([
+            "status"    =>    "success",
+            "data"        =>    $rooms
+        ]);
     }
 
     /**
-     * @SWG\Get(
-     *   path="/api/escape-rooms/{room-id}",
-     *   summary="Escape room list",
-     *   @SWG\Response(response=200, description="successful operation")
+     * @OA\Get(
+     *   path="/api/escape-rooms/{id}",
+     * operationId="showRoomDetail",
+     *  tags={"EscapeRoom"},
+     *  @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="room id",
+     *         required=true,
+     *   ),
+     *   summary="escape room detail",
+     *   @OA\Response(response=200, description="successful operation")
      * )
      *
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function time_slots(EscapeRoom $escapeRoom)
+    public function show($escapeRoomId)
     {
-        $slots = $this->repo->time_slots($escapeRoom->id);
+        $room = $this->repo->show($escapeRoomId);
 
-		return response()->json([
-			"status"	=>	"success",
-			"data"		=>	$slots
-		]);
+        return response()->json([
+            "status"    =>    "success",
+            "data"        =>    $room
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *   path="/api/escape-rooms/time-slots/{id}",
+     * operationId="showRoomTimeSlots",
+     *  tags={"EscapeRoom"},
+     *  @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="room id",
+     *         required=true,
+     *   ),
+     *   summary="escape room available time slots",
+     *   @OA\Response(response=200, description="successful operation")
+     * )
+     *
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function time_slots($escapeRoomId)
+    {
+        $slots = $this->repo->time_slots($escapeRoomId);
+
+        return response()->json([
+            "status"    =>    "success",
+            "data"        =>    $slots
+        ]);
     }
 }

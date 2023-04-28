@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Http\Controllers\Controller;
 use App\Http\Repository\IBookingRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -14,11 +15,15 @@ class BookingController extends Controller
     {
         $this->repo = app()->make(IBookingRepository::class);
     }
-     /**
-     * @SWG\Get(
+    /**
+     *
+     * @OA\Get(
      *   path="/api/bookings",
+     * security={{"bearer_token":{}}},
+     * operationId="showBookingList",
+     *  tags={"Booking"},
      *   summary="booking list",
-     *   @SWG\Response(response=200, description="successful operation")
+     *   @OA\Response(response=200, description="successful operation")
      * )
      *
      * Display a listing of the resource.
@@ -26,50 +31,94 @@ class BookingController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function index(Request $request)
-     {
-         $bookings = $this->repo->get($request,$request->input("page"));
+    public function index(Request $request)
+    {
+        $bookings = $this->repo->get($request, $request->input("page"));
 
-         return response()->json([
-             "status"	=>	"success",
-             "data"		=>	$bookings
-         ]);
-     }
+        return response()->json([
+            "status"    =>    "success",
+            "data"        =>    $bookings
+        ]);
+    }
 
-     /**
-      * @SWG\Get(
-      *   path="/api/escape-rooms/{id}",
-      *   summary="Escape room list",
-      *   @SWG\Response(response=200, description="successful operation")
-      * )
-      *
-      * Display a listing of the resource.
-      *
-      * @return \Illuminate\Http\Response
-      */
-     public function show(Booking $booking)
-     {
-         $booking = $this->repo->show($booking->id,$booking);
+    /**
+     * @OA\Get(
+     *   path="/api/bookings/{id}",
+     * operationId="showBooking",
+     *  tags={"Booking"},
+     *  @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         description="Buscar por estado",
+     *         required=true,
+     *   ),
+     *   summary="Escape room detail",
+     *   @OA\Response(response=200, description="successful operation")
+     * )
+     *
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Booking $booking)
+    {
+        $booking = $this->repo->show($booking->id, $booking);
 
-         return response()->json([
-             "status"	=>	"success",
-             "data"		=>	$booking
-         ]);
-     }
-
+        return response()->json([
+            "status"    =>    "success",
+            "data"        =>    $booking
+        ]);
+    }
+    /**
+     * @OA\Post(
+     * path="/api/bookings",
+     * operationId="addBooking",
+     *  tags={"Booking"},
+     * security={{"bearer_token":{}}},
+     * summary="Add Booking",
+     * description="Booking Add Here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *         @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *               type="object",
+     *               required={"time_slot_id"},
+     *               @OA\Property(property="time_slot_id", type="integer")
+     *            ),
+     *        ),
+     *    ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Booking Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
 
     public function store(Request $request)
-	{
-		$request->validate([
-			"time_slot_id"		=>	["required"]
-		]);
+    {
+        $request->validate([
+            "time_slot_id"        =>    ["required"]
+        ]);
 
-		$this->repo->create([
-			"user_id"	=> auth('api')->id(),
-			...$request->all()
-		]);
-
-		return response(["status" => "success"]);
-	}
-
+        $data = $this->repo->create([
+            "user_id"    => 1,
+            ...$request->all()
+        ]);
+        if ($data) {
+            return response([
+                "status" => "success",
+                "data" => $data
+            ]);
+        } else {
+            return response([
+                "status" => "error",
+                "data" => null,
+                "message" => "Room is not available on your choosed time"
+            ]);
+        }
+    }
 }

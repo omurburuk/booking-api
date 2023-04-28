@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\Repository\BookingRepository;
 use App\Http\Repository\EscapeRoomRepository;
-use App\Http\Repository\IBaseRepository;
-use Illuminate\Support\ServiceProvider;
+use App\Http\Repository\IBookingRepository;
+use App\Http\Repository\IEscapeRoomRepository;
 
 class RepoServiceProvider
 {
@@ -15,6 +16,7 @@ class RepoServiceProvider
      */
     public static function register(): void
     {
-        app()->bind(IBaseRepository::class, EscapeRoomRepository::class);
+        app()->bind(IEscapeRoomRepository::class, EscapeRoomRepository::class);
+        app()->bind(IBookingRepository::class, BookingRepository::class);
     }
 }

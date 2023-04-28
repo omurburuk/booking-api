@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\EscapeRoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +17,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', 'Api\AuthController@login');
+Route::post('login',[AuthController::class, 'login']);
+    Route::get('user', function (Request $request) {
+        return $request->user();
+    });
+    Route::get('bookings', [BookingController::class,'index']);
+    Route::get('bookings/{id}', [BookingController::class,'show']);
+    Route::post('bookings', [BookingController::class,'store']);
+    Route::get('escape-rooms', [EscapeRoomController::class,'index']);
+    Route::get('escape-rooms/{id}', [EscapeRoomController::class,'show']);
+    Route::get('escape-rooms/time-slots/{id}', [EscapeRoomController::class,'time_slots']);
+    Route::post('escape-rooms', [EscapeRoomController::class,'store']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
