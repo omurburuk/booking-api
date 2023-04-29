@@ -27,4 +27,5 @@ The Booking api is open-sourced software licensed under the [MIT license](https:
 * Run "php artisan migrate"
 * Run "php artisan db:seed"
 * Run "php artisan serve"
+* Go to Swagger documentation Ex: "http://127.0.0.1:8000/api/documentation"
 * Good job!

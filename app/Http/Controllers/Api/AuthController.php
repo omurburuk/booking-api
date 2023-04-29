@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -12,6 +14,7 @@ class AuthController extends Controller
      * @OA\Post(
      * path="/api/login",
      * operationId="authLogin",
+     * security={{"bearer_token":{}}},
      * tags={"Auth"},
      * summary="User Login",
      * description="Login User Here",
@@ -52,17 +55,19 @@ class AuthController extends Controller
             'email' => 'email|required',
             'password' => 'required'
         ]);
-        if (Auth::attempt($validator)) {
-            $success['user'] = auth()->user();
-            $success['token'] = auth()->user()->createToken('authToken')->plainTextToken;
-            return response()->json(['success' => $success])->setStatusCode(200);
+        if (auth()->attempt($validator)) {
+            $user = User::where("email", $validator["email"])->first();
+            if ($user) {
+                auth()->loginUsingId($user->id, true);
+                Auth::login($user);
+                $success['user'] = auth()->user();
+                $success['token'] = auth()->user()->createToken('authToken')->plainTextToken;
+                return response()->json(['success' => $success])->setStatusCode(200);
+            } else {
+                return response()->json(['error' => 'Unauthorised! User not found!'], 401);
+            }
         }
-        if (!auth()->attempt($validator)) {
-            return response()->json(['error' => 'Unauthorised'], 401);
-        } else {
-            $success['token'] = auth()->user()->createToken('authToken')->plainTextToken;
-            $success['user'] = auth()->user();
-            return response()->json(['success' => $success])->setStatusCode(200);
-        }
+        return response()->json(['error' => 'Unauthorised'], 401);
+
     }
 }

@@ -19,6 +19,7 @@ class EscapeRoomController extends Controller
      * @OA\Get(
      *   path="/api/escape-rooms",
      * operationId="showRoomList",
+     * security={{"bearer_token":{}}},
      *  tags={"EscapeRoom"},
      *   summary="escape room list",
      *   @OA\Response(response=200, description="successful operation")
@@ -43,6 +44,7 @@ class EscapeRoomController extends Controller
      * @OA\Get(
      *   path="/api/escape-rooms/{id}",
      * operationId="showRoomDetail",
+     * security={{"bearer_token":{}}},
      *  tags={"EscapeRoom"},
      *  @OA\Parameter(
      *         name="id",
@@ -71,6 +73,7 @@ class EscapeRoomController extends Controller
     /**
      * @OA\Get(
      *   path="/api/escape-rooms/time-slots/{id}",
+     * security={{"bearer_token":{}}},
      * operationId="showRoomTimeSlots",
      *  tags={"EscapeRoom"},
      *  @OA\Parameter(

@@ -37,6 +37,7 @@ class EscapeRoomRepository implements IEscapeRoomRepository
     public function show($id)
     {
         $room = EscapeRoom::query()
+            ->with("timeSlots")
             ->where("id", $id)
             ->first();
 

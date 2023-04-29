@@ -9,6 +9,7 @@ use App\Models\EscapeRoom;
 use App\Models\TimeSlot;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $user = User::create([
 			"name"	=>	"Admin",
 			"email"	=>	"admin@bookingapi.com",
-			"password"	=>	bcrypt('123456'),
+			"password"	=>	Hash::make('123456'),
 			"birth_date"	=> "1995-03-22"
 		]);
 		$user->email_verified_at = now();

@@ -68,7 +68,12 @@
                     "404": {
                         "description": "Resource Not Found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/bookings": {
@@ -93,8 +98,8 @@
                 "tags": [
                     "Booking"
                 ],
-                "summary": "Add Booking",
-                "description": "Booking Add Here",
+                "summary": "Add booking",
+                "description": "Booking add here",
                 "operationId": "addBooking",
                 "requestBody": {
                     "content": {
@@ -144,7 +149,7 @@
                 "tags": [
                     "Booking"
                 ],
-                "summary": "Escape room detail",
+                "summary": "Show booking detail",
                 "operationId": "showBooking",
                 "parameters": [
                     {
@@ -158,7 +163,12 @@
                     "200": {
                         "description": "successful operation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/escape-rooms": {
@@ -172,7 +182,12 @@
                     "200": {
                         "description": "successful operation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/escape-rooms/{id}": {
@@ -194,7 +209,12 @@
                     "200": {
                         "description": "successful operation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/escape-rooms/time-slots/{id}": {
@@ -216,7 +236,12 @@
                     "200": {
                         "description": "successful operation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         }
     },

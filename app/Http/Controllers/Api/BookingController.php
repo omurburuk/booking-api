@@ -45,6 +45,7 @@ class BookingController extends Controller
      * @OA\Get(
      *   path="/api/bookings/{id}",
      * operationId="showBooking",
+     * security={{"bearer_token":{}}},
      *  tags={"Booking"},
      *  @OA\Parameter(
      *         name="id",
@@ -52,7 +53,7 @@ class BookingController extends Controller
      *         description="Buscar por estado",
      *         required=true,
      *   ),
-     *   summary="Escape room detail",
+     *   summary="Show booking detail",
      *   @OA\Response(response=200, description="successful operation")
      * )
      *
@@ -75,8 +76,8 @@ class BookingController extends Controller
      * operationId="addBooking",
      *  tags={"Booking"},
      * security={{"bearer_token":{}}},
-     * summary="Add Booking",
-     * description="Booking Add Here",
+     * summary="Add booking",
+     * description="Booking add here",
      *     @OA\RequestBody(
      *         @OA\JsonContent(),
      *         @OA\MediaType(
@@ -105,7 +106,7 @@ class BookingController extends Controller
         ]);
 
         $data = $this->repo->create([
-            "user_id"    => 1,
+            "user_id"    => auth()->user() ?? 1,
             ...$request->all()
         ]);
         if ($data) {
