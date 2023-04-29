@@ -32,7 +32,7 @@ class BookingRepository implements IBookingRepository
             $user->fill($userData->toArray());
             if ($user->getIsBirthday()) {
                 $request['book_amount'] =
-                    $timeSlot->escapeRoom->amount - ($timeSlot->escapeRoom->amount * config("birthday_discount_rate"));
+                    $timeSlot->escapeRoom->amount - ($timeSlot->escapeRoom->amount * config("birthday_discount_rate",0.1));
             } else {
                 $request['book_amount'] = $timeSlot->escapeRoom->amount;
             }

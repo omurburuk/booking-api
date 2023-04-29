@@ -14,7 +14,6 @@ class AuthController extends Controller
      * @OA\Post(
      * path="/api/login",
      * operationId="authLogin",
-     * security={{"bearer_token":{}}},
      * tags={"Auth"},
      * summary="User Login",
      * description="Login User Here",
@@ -58,10 +57,8 @@ class AuthController extends Controller
         if (auth()->attempt($validator)) {
             $user = User::where("email", $validator["email"])->first();
             if ($user) {
-                auth()->loginUsingId($user->id, true);
-                Auth::login($user);
-                $success['user'] = auth()->user();
-                $success['token'] = auth()->user()->createToken('authToken')->plainTextToken;
+                $success['user'] = $user;
+                $success['token'] = $user->createToken('authToken')->accessToken;
                 return response()->json(['success' => $success])->setStatusCode(200);
             } else {
                 return response()->json(['error' => 'Unauthorised! User not found!'], 401);

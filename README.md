@@ -28,4 +28,8 @@ The Booking api is open-sourced software licensed under the [MIT license](https:
 * Run "php artisan db:seed"
 * Run "php artisan serve"
 * Go to Swagger documentation Ex: "http://127.0.0.1:8000/api/documentation"
+* Try api/login method with default user with created on migrate or another created user. Default user(email=> admin@bookingapi.com, password =>123456)
+* Get user info and token
+* Write rigth top to Authorize Bearer {token}
+* Alright! Use another api methods
 * Good job!

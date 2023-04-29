@@ -41,9 +41,9 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'passport', // set this to passport
-            'provider' => 'users'
-        ],
+            'driver' => 'passport',
+            'provider' => 'users',
+        ]
     ],
 
     /*

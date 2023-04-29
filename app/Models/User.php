@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'birth_date',
     ];
 
     /**
@@ -49,7 +50,7 @@ class User extends Authenticatable
         $date = $this->birth_date;
         $birthDate = Carbon::parse($date)->format("m-d");
         $mytime =  Carbon::now()->format("m-d");
-        if ($birthDate== $mytime) {
+        if ($birthDate == $mytime) {
             return true;
         }
         return false;

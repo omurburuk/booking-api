@@ -37,6 +37,7 @@ class BookingController extends Controller
 
         return response()->json([
             "status"    =>    "success",
+            "user" =>  Auth::user(),
             "data"        =>    $bookings
         ]);
     }
@@ -106,7 +107,7 @@ class BookingController extends Controller
         ]);
 
         $data = $this->repo->create([
-            "user_id"    => auth()->user() ?? 1,
+            "user_id"    => Auth::user()->id,
             ...$request->all()
         ]);
         if ($data) {
