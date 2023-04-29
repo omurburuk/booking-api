@@ -120,7 +120,7 @@ class BookingController extends Controller
                 "status" => "error",
                 "data" => null,
                 "message" => "Room is not available on your choosed time"
-            ]);
+            ])->setStatusCode(400);
         }
     }
 }

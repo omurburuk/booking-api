@@ -15,8 +15,7 @@ class UserController extends Controller
 		return response([
 			"status"	=>	"success",
 			"data"		=>	[
-				...$user->toArray(),
-				"bookings"	=>	$user->bookings
+				...$user->toArray()
 			]
 		]);
 	}
