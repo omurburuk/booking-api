@@ -32,7 +32,7 @@ class BookingRepository implements IBookingRepository
             $user->fill($userData->toArray());
             if ($user->getIsBirthday()) {
                 $request['book_amount'] =
-                    $timeSlot->escapeRoom->amount - ($timeSlot->escapeRoom->amount * config("birthday_discount_rate",0.1));
+                    $timeSlot->escapeRoom->amount - ($timeSlot->escapeRoom->amount * config("birthday_discount_rate", 0.1));
             } else {
                 $request['book_amount'] = $timeSlot->escapeRoom->amount;
             }
@@ -81,15 +81,26 @@ class BookingRepository implements IBookingRepository
     }
 
 
-    public function delete($id)
+    public function delete($request)
     {
-        Booking::where("id", $id)->delete();
+        $booking = Booking::query()->where("id", $request["booking_id"])
+            ->where("user_id", $request["user_id"])->first();
+        if ($booking) {
+            Booking::where("id", $request["booking_id"])->delete();
+            TimeSlot::where("id",$booking->time_slot_id)
+            ->update([
+                "is_available"=>true
+            ]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public function time_slots($id)
+    public function time_slot($id)
     {
         $booking = Booking::where("id", $id)
-            ->with("time_slots")
+            ->with("escapeRoom")
             ->first();
 
         //$booking=BookingResource::collection($booking->time_slots);

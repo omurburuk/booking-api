@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Booking;
 use App\Http\Controllers\Controller;
 use App\Http\Repository\IBookingRepository;
+use App\Http\Requests\BookingCancelRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -120,6 +121,50 @@ class BookingController extends Controller
                 "status" => "error",
                 "data" => null,
                 "message" => "Room is not available on your choosed time"
+            ])->setStatusCode(400);
+        }
+    }
+    /**
+     * @OA\Delete(
+     * path="/api/bookings/{id}",
+     * operationId="cancelBooking",
+     *  tags={"Booking"},
+     * security={{"bearer_token":{}}},
+     * summary="Cancel booking",
+     * description="Cancel booking here",
+    *  @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="booking id",
+     *         required=true,
+     *   ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Booking canceled successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     * @param $booking_id
+     * @return JsonResponse
+     */
+    public function destroy($booking_id)
+    {
+        if ($this->repo->delete([
+            "user_id" => auth()->user()->id,
+            "booking_id" => $booking_id
+        ])) {
+            return response([
+                "status"    => "success",
+                "state"     => true,
+                "message"   => "Booking canceled!"
+            ])->setStatusCode(200);
+        } else {
+            return response([
+                "status"    => "success",
+                "state"     => false,
+                "message"   => "Booking not found!"
             ])->setStatusCode(400);
         }
     }

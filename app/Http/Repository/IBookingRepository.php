@@ -16,5 +16,5 @@ interface IBookingRepository
 
 	public function delete($id);
 
-    public function time_slots($id);
+    public function time_slot($id);
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -64,7 +64,7 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Unauthorised! User not found!'], 401);
             }
         }
-        return response()->json(['error' => 'Unauthorised'], 401);
+        return response()->json(['error' => 'Unauthorised! User not found!'], 401);
 
     }
 }

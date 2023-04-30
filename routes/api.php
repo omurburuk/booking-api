@@ -26,6 +26,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('bookings', [BookingController::class,'index']);
     Route::get('bookings/{id}', [BookingController::class,'show']);
     Route::post('bookings', [BookingController::class,'store']);
+    Route::delete('bookings/{id}', [BookingController::class,'destroy']);
     Route::get('escape-rooms', [EscapeRoomController::class,'index']);
     Route::get('escape-rooms/{id}', [EscapeRoomController::class,'show']);
     Route::get('escape-rooms/time-slots/{id}', [EscapeRoomController::class,'time_slots']);
